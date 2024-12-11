@@ -7,11 +7,14 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
+  Alert
 } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
+
 import { router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../services/FirebaseConfig';
+
 
 const Login = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -21,24 +24,30 @@ const Login = () => {
     }
   });
 
-  const onSubmit = (data) => {
-    console.log('Formulário enviado:', data);
+  const onSubmit = async (data) => {
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.senha);
+      console.log('Login efetuado com sucesso');
+      router.replace('/(tabs)'); // Redireciona para a rota principal
+    } catch (error) {
+      console.error('Erro no login:', error.message);
+      Alert.alert('Erro', 'Erro ao fazer login: ' + error.message);
+    }
   };
-
   const navigateToRegister = () => {
     router.push('/cadastro');
   };
 
   return (
-    <ThemedView style={styles.container}>
+    
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
         <View style={styles.formContainer}>
-          <ThemedText type="title" style={styles.title}>
+          <Text style={styles.title}>
             Entrar
-          </ThemedText>
+          </Text>
           
           <View style={styles.inputContainer}>
             <Controller
@@ -110,7 +119,7 @@ const Login = () => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </ThemedView>
+    
   );
 };
 

@@ -8,9 +8,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Alert,
 } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
+
 import { router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
 import { auth } from '../../../services/FirebaseConfig';
@@ -45,30 +45,31 @@ const Register = () => {
         dataCadastro: new Date().toISOString()
       });
       
-      console.log('Cadastro efetuado com sucesso!');
-      console.log('Usuário:', userCredential.user);
-      
-      // Opcional: redirecionar para a tela de login
-      router.replace('/login');
+      Alert.alert(
+        "Sucesso",
+        "Cadastro realizado com sucesso!",
+        [
+          { text: "OK", onPress: () => router.replace('/') }
+        ]
+      );
       
     } catch (error) {
-      console.error('Erro no cadastro:', error.message);
-      // Você pode adicionar um estado para mostrar o erro na interface
-      // setError(error.message);
+      Alert.alert("Erro", "Erro ao realizar cadastro: " + error.message);
     }
   };
 
   return (
-    <ThemedView style={styles.container}>
+   
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.formContainer}>
-            <ThemedText type="title" style={styles.title}>
+            
+            <Text style={styles.title}>
               Cadastro
-            </ThemedText>
+            </Text>
             
             <View style={styles.inputContainer}>
               <Controller
@@ -214,7 +215,7 @@ const Register = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </ThemedView>
+ 
   );
 };
 
