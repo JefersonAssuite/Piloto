@@ -28,7 +28,7 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.senha);
       console.log('Login efetuado com sucesso');
-      router.replace('/(tabs)'); // Redireciona para a rota principal
+      router.replace('/home'); // Redireciona para a tela home
     } catch (error) {
       console.error('Erro no login:', error.message);
       Alert.alert('Erro', 'Erro ao fazer login: ' + error.message);
